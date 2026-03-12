@@ -1,0 +1,115 @@
+<Layouts.app flash={@flash}>
+  <div class="space-y-10">
+    <section class="rounded-3xl border border-base-300 bg-base-100/90 p-8 shadow-sm ring-1 ring-base-300/50">
+      <div class="flex flex-col gap-3 border-b border-base-300 pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-medium uppercase tracking-[0.2em] text-base-content/50">
+            Site diary
+          </p>
+          <h1 class="mt-2 text-3xl font-semibold tracking-tight text-base-content">
+            {@page_title}
+          </h1>
+          <p class="mt-2 max-w-2xl text-sm leading-6 text-base-content/70">
+            Capture a daily snapshot of progress, site conditions, workforce levels, and key notes.
+          </p>
+        </div>
+        <div class="rounded-2xl bg-base-200 px-4 py-3 text-sm text-base-content/70 shadow-inner">
+          <span class="font-semibold text-base-content">{length(@reports)}</span> reports logged
+        </div>
+      </div>
+
+      <.form
+        for={@form}
+        id="daily-report-form"
+        phx-change={if @editing_report, do: "validate_edit", else: "validate"}
+        phx-submit={if @editing_report, do: "update", else: "save"}
+        class="mt-8 space-y-6"
+      >
+        <div class="grid gap-6 md:grid-cols-2">
+          <.input
+            field={@form[:site_name]}
+            type="text"
+            label="Site name"
+            placeholder="North Tower Redevelopment"
+          />
+          <.input field={@form[:date]} type="date" label="Date" />
+          <.input
+            field={@form[:weather]}
+            type="text"
+            label="Weather"
+            placeholder="Clear with light winds"
+          />
+          <.input field={@form[:workers_on_site]} type="number" label="Workers on site" min="0" />
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-2">
+          <.input
+            field={@form[:progress_summary]}
+            type="textarea"
+            label="Progress summary"
+            rows="5"
+            placeholder="Structural steel installation completed on level 4."
+          />
+          <.input
+            field={@form[:notes]}
+            type="textarea"
+            label="Notes"
+            rows="5"
+            placeholder="Access to the eastern gate was delayed during the morning delivery window."
+          />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <.button type="submit" id="save-report-button" variant="primary">
+            {if @editing_report, do: "Update report", else: "Create report"}
+          </.button>
+          <.button
+            :if={@editing_report}
+            type="button"
+            id="cancel-edit-button"
+            phx-click="cancel_edit"
+            class="btn btn-ghost"
+          >
+            Cancel
+          </.button>
+        </div>
+      </.form>
+    </section>
+
+    <section class="rounded-3xl border border-base-300 bg-base-100/90 p-8 shadow-sm ring-1 ring-base-300/50">
+      <.header>
+        Recent reports
+        <:subtitle>
+          Review the latest field entries and jump back into editing with one click.
+        </:subtitle>
+      </.header>
+
+      <div
+        :if={@reports == []}
+        class="rounded-2xl border border-dashed border-base-300 bg-base-200/60 px-6 py-10 text-center text-sm text-base-content/60"
+      >
+        No daily reports yet. Create the first report using the form above.
+      </div>
+
+      <div :if={@reports != []} class="overflow-x-auto">
+        <.table id="daily-reports" rows={@reports} row_id={&"report-#{&1.id}"}>
+          <:col :let={report} label="Date">{report.date}</:col>
+          <:col :let={report} label="Site">{report.site_name}</:col>
+          <:col :let={report} label="Weather">{report.weather}</:col>
+          <:col :let={report} label="Workers">{report.workers_on_site}</:col>
+          <:col :let={report} label="Progress">{report.progress_summary}</:col>
+          <:action :let={report}>
+            <button
+              type="button"
+              phx-click="edit"
+              phx-value-id={report.id}
+              class="text-sm font-semibold text-primary transition hover:text-primary/80"
+            >
+              Edit
+            </button>
+          </:action>
+        </.table>
+      </div>
+    </section>
+  </div>
+</Layouts.app>
