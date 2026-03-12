@@ -1,0 +1,124 @@
+<Layouts.app flash={@flash}>
+  <section class="space-y-10">
+    <div class="rounded-3xl border border-zinc-200/80 bg-white/90 p-8 shadow-sm ring-1 ring-zinc-950/5 backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/80">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="space-y-2">
+          <p class="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">Site diary</p>
+          <h1 class="text-3xl font-semibold tracking-tight text-zinc-950 dark:text-zinc-50">
+            Daily reports
+          </h1>
+          <p class="max-w-2xl text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Capture progress, weather, staffing, and notes from site visits in one place.
+          </p>
+        </div>
+        <div class="rounded-2xl bg-zinc-950 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-zinc-950/20 dark:bg-zinc-100 dark:text-zinc-950">
+          {length(@daily_reports)} report(s)
+        </div>
+      </div>
+    </div>
+
+    <div class="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+      <section class="rounded-3xl border border-zinc-200/80 bg-white p-8 shadow-sm ring-1 ring-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-900">
+        <div class="mb-6 space-y-2">
+          <h2 class="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Create report</h2>
+          <p class="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            Add a fresh site update for today or backfill previous activity.
+          </p>
+        </div>
+
+        <.form
+          for={@form}
+          id="daily-report-form"
+          phx-change="validate"
+          phx-submit="save"
+          class="space-y-5"
+        >
+          <div class="grid gap-5 sm:grid-cols-2">
+            <.input field={@form[:site_name]} type="text" label="Site name" />
+            <.input field={@form[:date]} type="date" label="Date" />
+            <.input field={@form[:weather]} type="text" label="Weather" />
+            <.input field={@form[:workers_on_site]} type="number" label="Workers on site" min="0" />
+          </div>
+
+          <.input
+            field={@form[:progress_summary]}
+            type="textarea"
+            label="Progress summary"
+            rows="4"
+          />
+          <.input field={@form[:notes]} type="textarea" label="Notes" rows="5" />
+
+          <div class="flex justify-end">
+            <button
+              type="submit"
+              class="inline-flex items-center justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            >
+              Save report
+            </button>
+          </div>
+        </.form>
+      </section>
+
+      <section class="rounded-3xl border border-zinc-200/80 bg-white p-8 shadow-sm ring-1 ring-zinc-950/5 dark:border-zinc-800 dark:bg-zinc-900">
+        <div class="mb-6 flex items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-semibold text-zinc-950 dark:text-zinc-50">Recent entries</h2>
+            <p class="text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+              Your latest construction diary submissions.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <%= if @daily_reports == [] do %>
+            <div class="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 px-6 py-10 text-center text-sm text-zinc-500 dark:border-zinc-700 dark:bg-zinc-950/50 dark:text-zinc-400">
+              No reports yet. Create your first daily report using the form.
+            </div>
+          <% else %>
+            <%= for report <- @daily_reports do %>
+              <article class="rounded-2xl border border-zinc-200 bg-zinc-50/80 p-5 transition hover:border-emerald-300 hover:bg-white dark:border-zinc-800 dark:bg-zinc-950/60 dark:hover:border-emerald-700">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <h3 class="text-base font-semibold text-zinc-950 dark:text-zinc-50">
+                      {report.site_name}
+                    </h3>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400">{report.date}</p>
+                  </div>
+                  <span class="inline-flex w-fit items-center rounded-full bg-sky-100 px-3 py-1 text-xs font-medium text-sky-700 dark:bg-sky-950 dark:text-sky-300">
+                    {report.weather}
+                  </span>
+                </div>
+
+                <dl class="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <dt class="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                      Workers on site
+                    </dt>
+                    <dd class="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
+                      {report.workers_on_site}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                      Progress summary
+                    </dt>
+                    <dd class="mt-1 text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+                      {report.progress_summary}
+                    </dd>
+                  </div>
+                </dl>
+
+                <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+                  <p class="text-xs font-medium uppercase tracking-wide text-zinc-500">Notes</p>
+                  <p class="mt-2 text-sm leading-6 text-zinc-700 dark:text-zinc-300">
+                    {report.notes}
+                  </p>
+                </div>
+              </article>
+            <% end %>
+          <% end %>
+        </div>
+      </section>
+    </div>
+  </section>
+</Layouts.app>
