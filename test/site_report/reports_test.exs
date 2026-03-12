@@ -93,5 +93,13 @@ defmodule SiteReport.ReportsTest do
 
       assert Reports.get_daily_report!(daily_report.id).workers_on_site == 18
     end
+
+    test "delete_daily_report/1 deletes the daily report" do
+      assert {:ok, %DailyReport{} = daily_report} = Reports.create_daily_report(@valid_attrs)
+
+      assert {:ok, %DailyReport{} = deleted_report} = Reports.delete_daily_report(daily_report)
+      assert deleted_report.id == daily_report.id
+      assert Reports.list_daily_reports() == []
+    end
   end
 end

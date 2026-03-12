@@ -48,6 +48,29 @@ defmodule SiteReportWeb.ReportLive.Index do
      |> assign_form(Reports.change_daily_report(daily_report))}
   end
 
+  def handle_event("delete", %{"id" => id}, socket) do
+    daily_report = Reports.get_daily_report!(id)
+
+    {:ok, _daily_report} = Reports.delete_daily_report(daily_report)
+
+    socket =
+      socket
+      |> put_flash(:info, "Daily report deleted successfully.")
+      |> assign(:reports, Reports.list_daily_reports())
+
+    socket =
+      if socket.assigns.editing_report && socket.assigns.editing_report.id == daily_report.id do
+        socket
+        |> assign(:editing_report, nil)
+        |> assign(:page_title, "Daily reports")
+        |> assign_form(Reports.change_daily_report(%DailyReport{}))
+      else
+        socket
+      end
+
+    {:noreply, socket}
+  end
+
   def handle_event("validate_edit", %{"daily_report" => daily_report_params}, socket) do
     changeset =
       socket.assigns.editing_report

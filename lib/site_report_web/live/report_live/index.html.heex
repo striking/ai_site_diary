@@ -108,6 +108,17 @@
               Edit
             </button>
           </:action>
+          <:action :let={report}>
+            <button
+              type="button"
+              phx-click="delete"
+              phx-value-id={report.id}
+              data-confirm="Are you sure you want to delete this daily report?"
+              class="text-sm font-semibold text-error transition hover:text-error/80"
+            >
+              Delete
+            </button>
+          </:action>
         </.table>
       </div>
     </section>
