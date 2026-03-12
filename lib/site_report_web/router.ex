@@ -18,6 +18,8 @@ defmodule SiteReportWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/reports", DailyReportLive.Index, :index
+    live "/reports/new", DailyReportLive.Form, :new
   end
 
   # Other scopes may use custom stacks.

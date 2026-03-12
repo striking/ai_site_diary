@@ -306,6 +306,32 @@ defmodule SiteReportWeb.CoreComponents do
   end
 
   @doc """
+  Renders a simple form wrapper.
+  """
+  attr :for, :any, required: true
+  attr :id, :string, default: nil
+  attr :as, :atom, default: nil
+
+  attr :rest, :global,
+    include: ~w(action method multipart novalidate phx-change phx-submit phx-trigger-action class)
+
+  slot :inner_block, required: true
+  slot :actions
+
+  def simple_form(assigns) do
+    ~H"""
+    <.form :let={f} for={@for} as={@as} id={@id} {@rest}>
+      <div class="space-y-6">
+        {render_slot(@inner_block, f)}
+        <div :if={@actions != []} class="flex items-center justify-end gap-3">
+          {render_slot(@actions, f)}
+        </div>
+      </div>
+    </.form>
+    """
+  end
+
+  @doc """
   Renders a header with title.
   """
   slot :inner_block, required: true
@@ -388,6 +414,30 @@ defmodule SiteReportWeb.CoreComponents do
         </tr>
       </tbody>
     </table>
+    """
+  end
+
+  @doc """
+  Renders a back navigation link.
+  """
+  attr :navigate, :string, default: nil
+  attr :patch, :string, default: nil
+  attr :href, :string, default: nil
+  attr :class, :any, default: nil
+
+  slot :inner_block, required: true
+
+  def back(assigns) do
+    assigns =
+      assign_new(assigns, :class, fn ->
+        "inline-flex items-center gap-2 text-sm font-medium text-base-content/70 transition hover:text-base-content"
+      end)
+
+    ~H"""
+    <.link navigate={@navigate} patch={@patch} href={@href} class={@class}>
+      <span aria-hidden="true">←</span>
+      {render_slot(@inner_block)}
+    </.link>
     """
   end
 
