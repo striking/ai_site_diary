@@ -1,3 +1,11 @@
+## This app: no authentication
+
+This app does **NOT** have authentication or scopes set up. Specifically:
+
+- There is NO `live_session` in `router.ex` — add LiveView routes directly inside `scope "/", SiteReportWeb do`
+- There is NO `current_scope` assign — **never** pass `current_scope={@current_scope}` to `<Layouts.app>`, just use `<Layouts.app flash={@flash}>`
+- Ignore AGENTS.md sections about "Authenticated Routes" or `current_scope` — they do not apply here
+
 This is a web application written using the Phoenix web framework.
 
 ## Project guidelines
