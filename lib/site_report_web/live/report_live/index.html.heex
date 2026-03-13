@@ -107,9 +107,61 @@
             >
               Edit
             </button>
+            <button
+              type="button"
+              id={"delete-report-button-#{report.id}"}
+              phx-click="confirm_delete"
+              phx-value-id={report.id}
+              class="text-sm font-semibold text-error transition hover:text-error/80"
+            >
+              Delete
+            </button>
           </:action>
         </.table>
       </div>
     </section>
+  </div>
+
+  <div
+    :if={@report_pending_delete}
+    id="delete-report-modal"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-base-content/45 px-4 backdrop-blur-sm"
+  >
+    <div class="w-full max-w-md rounded-3xl border border-base-300 bg-base-100 p-6 shadow-2xl ring-1 ring-base-300/60">
+      <div class="flex items-start gap-4">
+        <div class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-error/10 text-error">
+          <.icon name="hero-exclamation-triangle" class="size-6" />
+        </div>
+        <div class="space-y-2">
+          <h2 class="text-lg font-semibold text-base-content">Delete daily report?</h2>
+          <p class="text-sm leading-6 text-base-content/70">
+            Are you sure you want to delete the report for <span class="font-semibold text-base-content">
+              {@report_pending_delete.date} — {@report_pending_delete.site_name}
+            </span>?
+          </p>
+          <p class="text-sm text-base-content/60">This action cannot be undone.</p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <.button
+          type="button"
+          id="cancel-delete-button"
+          phx-click="cancel_delete"
+          class="btn btn-ghost"
+        >
+          Cancel
+        </.button>
+        <.button
+          type="button"
+          id="confirm-delete-button"
+          phx-click="delete"
+          phx-value-id={@report_pending_delete.id}
+          class="btn btn-error text-error-content"
+        >
+          Delete
+        </.button>
+      </div>
+    </div>
   </div>
 </Layouts.app>
