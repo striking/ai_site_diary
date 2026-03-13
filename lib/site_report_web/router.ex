@@ -20,6 +20,7 @@ defmodule SiteReportWeb.Router do
     get "/", PageController, :home
     live "/reports", ReportLive.Index, :index
     live "/reports/new", ReportLive.New, :new
+    live "/reports/:id/edit", ReportLive.Edit, :edit
   end
 
   # Other scopes may use custom stacks.
