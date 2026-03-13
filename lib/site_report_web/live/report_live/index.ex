@@ -11,7 +11,8 @@ defmodule SiteReportWeb.ReportLive.Index do
      |> assign(:page_title, "Daily reports")
      |> assign(:reports, Reports.list_daily_reports())
      |> assign_form(Reports.change_daily_report(%DailyReport{}))
-     |> assign(:editing_report, nil)}
+     |> assign(:editing_report, nil)
+     |> assign(:report_pending_delete, nil)}
   end
 
   @impl true
@@ -46,6 +47,25 @@ defmodule SiteReportWeb.ReportLive.Index do
      |> assign(:editing_report, daily_report)
      |> assign(:page_title, "Edit daily report")
      |> assign_form(Reports.change_daily_report(daily_report))}
+  end
+
+  def handle_event("confirm_delete", %{"id" => id}, socket) do
+    {:noreply, assign(socket, :report_pending_delete, Reports.get_daily_report!(id))}
+  end
+
+  def handle_event("cancel_delete", _params, socket) do
+    {:noreply, assign(socket, :report_pending_delete, nil)}
+  end
+
+  def handle_event("delete", %{"id" => id}, socket) do
+    daily_report = Reports.get_daily_report!(id)
+    {:ok, _daily_report} = Reports.delete_daily_report(daily_report)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "Daily report deleted successfully.")
+     |> assign(:reports, Reports.list_daily_reports())
+     |> assign(:report_pending_delete, nil)}
   end
 
   def handle_event("validate_edit", %{"daily_report" => daily_report_params}, socket) do

@@ -93,5 +93,12 @@ defmodule SiteReport.ReportsTest do
 
       assert Reports.get_daily_report!(daily_report.id).workers_on_site == 18
     end
+
+    test "delete_daily_report/1 deletes the daily report" do
+      assert {:ok, %DailyReport{} = daily_report} = Reports.create_daily_report(@valid_attrs)
+
+      assert {:ok, %DailyReport{}} = Reports.delete_daily_report(daily_report)
+      assert_raise Ecto.NoResultsError, fn -> Reports.get_daily_report!(daily_report.id) end
+    end
   end
 end
