@@ -15,6 +15,12 @@ defmodule SiteReportWeb.Router do
   end
 
   scope "/", SiteReportWeb do
+    pipe_through :api
+
+    get "/health", HealthController, :index
+  end
+
+  scope "/", SiteReportWeb do
     pipe_through :browser
 
     get "/", PageController, :home
