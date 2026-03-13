@@ -447,3 +447,27 @@ And **never** do this:
 <!-- phoenix:liveview-end -->
 
 <!-- usage-rules-end -->
+
+### Testing LiveView redirects after form submit
+
+After a form submission that redirects (e.g. creating a resource and navigating back to the index), use `follow_redirect/2` — **never** call `live/2` again on the redirected response:
+
+    # CORRECT: follow the redirect after render_submit
+    {:ok, view, _html} = live(conn, ~p"/reports/new")
+
+    {:ok, index_view, html} =
+      view
+      |> form("#report-form", report: %{title: "Morning walkthrough", ...})
+      |> render_submit()
+      |> follow_redirect(conn)
+
+    assert html =~ "Report created"
+
+    # WRONG — causes {:error, :nosession}
+    {:ok, _view, html} = live(conn, render_submit(...))
+
+If the redirect goes to a non-LiveView page, `follow_redirect/2` returns `{:ok, conn, html}` instead.
+You can also assert on the redirect tuple directly without following it:
+
+    assert {:error, {:live_redirect, %{to: "/reports"}}} =
+      view |> form("#report-form", report: attrs) |> render_submit()
