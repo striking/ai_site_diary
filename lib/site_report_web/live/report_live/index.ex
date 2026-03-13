@@ -7,7 +7,6 @@ defmodule SiteReportWeb.ReportLive.Index do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:current_scope, nil)
      |> assign(:daily_reports, Reports.list_daily_reports())}
   end
 end
