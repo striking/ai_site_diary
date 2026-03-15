@@ -35,40 +35,47 @@ defmodule SiteReportWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="navbar px-4 sm:px-6 lg:px-8">
-      <div class="flex-1">
-        <a href="/" class="flex-1 flex w-fit items-center gap-2">
-          <img src={~p"/images/logo.svg"} width="36" />
-          <span class="text-sm font-semibold">v{Application.spec(:phoenix, :vsn)}</span>
-        </a>
-      </div>
-      <div class="flex-none">
-        <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li>
-            <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
-          </li>
-          <li>
-            <a href="https://github.com/phoenixframework/phoenix" class="btn btn-ghost">GitHub</a>
-          </li>
-          <li>
+    <div class="min-h-screen bg-gradient-to-b from-zinc-50 via-white to-amber-50 text-zinc-950">
+      <header class="border-b border-white/70 bg-white/80 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-5 sm:px-6 lg:px-8">
+          <a href="/" class="flex items-center gap-4">
+            <div class="flex size-11 items-center justify-center rounded-2xl bg-zinc-950 text-sm font-semibold text-white shadow-sm shadow-zinc-300/60">
+              SR
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-[0.3em] text-amber-600">
+                Daily reporting
+              </p>
+              <h1 class="text-lg font-semibold tracking-tight text-zinc-950">Site Report AI</h1>
+            </div>
+          </a>
+
+          <div class="flex items-center gap-3">
+            <.link
+              navigate={~p"/reports"}
+              class="hidden rounded-full px-4 py-2 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 sm:inline-flex"
+            >
+              Reports
+            </.link>
+            <.link
+              navigate={~p"/reports/new"}
+              class="inline-flex items-center rounded-full bg-zinc-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800"
+            >
+              New report
+            </.link>
             <.theme_toggle />
-          </li>
-          <li>
-            <a href="https://hexdocs.pm/phoenix/overview.html" class="btn btn-primary">
-              Get Started <span aria-hidden="true">&rarr;</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </header>
+          </div>
+        </div>
+      </header>
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
-        {render_slot(@inner_block)}
-      </div>
-    </main>
+      <main class="px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-6xl space-y-4">
+          {render_slot(@inner_block)}
+        </div>
+      </main>
 
-    <.flash_group flash={@flash} />
+      <.flash_group flash={@flash} />
+    </div>
     """
   end
 
@@ -122,31 +129,34 @@ defmodule SiteReportWeb.Layouts do
   """
   def theme_toggle(assigns) do
     ~H"""
-    <div class="card relative flex flex-row items-center border-2 border-base-300 bg-base-300 rounded-full">
-      <div class="absolute w-1/3 h-full rounded-full border-1 border-base-200 bg-base-100 brightness-200 left-0 [[data-theme=light]_&]:left-1/3 [[data-theme=dark]_&]:left-2/3 transition-[left]" />
+    <div class="relative flex flex-row items-center rounded-full border border-zinc-200 bg-white p-1 shadow-sm">
+      <div class="absolute left-1 h-9 w-9 rounded-full bg-zinc-100 transition-[left] [[data-theme=light]_&]:left-10 [[data-theme=dark]_&]:left-[4.75rem]" />
 
       <button
-        class="flex p-2 cursor-pointer w-1/3"
+        class="relative z-10 flex size-9 cursor-pointer items-center justify-center rounded-full text-zinc-500 transition hover:text-zinc-950"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="system"
+        type="button"
       >
-        <.icon name="hero-computer-desktop-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-computer-desktop" class="size-4" />
       </button>
 
       <button
-        class="flex p-2 cursor-pointer w-1/3"
+        class="relative z-10 flex size-9 cursor-pointer items-center justify-center rounded-full text-zinc-500 transition hover:text-zinc-950"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="light"
+        type="button"
       >
-        <.icon name="hero-sun-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-sun" class="size-4" />
       </button>
 
       <button
-        class="flex p-2 cursor-pointer w-1/3"
+        class="relative z-10 flex size-9 cursor-pointer items-center justify-center rounded-full text-zinc-500 transition hover:text-zinc-950"
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="dark"
+        type="button"
       >
-        <.icon name="hero-moon-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.icon name="hero-moon" class="size-4" />
       </button>
     </div>
     """

@@ -6,6 +6,7 @@ defmodule SiteReport.Reports.DailyReport do
     field :date, :date
     field :summary, :string
     field :title, :string
+    field :description, :string, virtual: true
 
     timestamps(type: :utc_datetime)
   end
@@ -14,5 +15,11 @@ defmodule SiteReport.Reports.DailyReport do
     daily_report
     |> cast(attrs, [:title, :summary, :date])
     |> validate_required([:title, :summary, :date])
+  end
+
+  def description_changeset(daily_report, attrs) do
+    daily_report
+    |> cast(attrs, [:description])
+    |> validate_required([:description])
   end
 end

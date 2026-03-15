@@ -3,6 +3,9 @@ defmodule SiteReportWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+    html = html_response(conn, 200)
+
+    assert html =~ "Site Report AI"
+    assert html =~ "Turn a quick description of the day's site activity into a structured daily report"
   end
 end

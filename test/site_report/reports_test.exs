@@ -18,6 +18,31 @@ defmodule SiteReport.ReportsTest do
       assert report.date == ~D[2026-03-13]
     end
 
+    test "create_daily_report/1 extracts report fields from a description" do
+      description =
+        "Installed steel beams in the north wing and completed the safety walkthrough. Two follow-up items remain for tomorrow."
+
+      assert {:ok, %DailyReport{} = report} =
+               Reports.create_daily_report(%{"description" => description})
+
+      assert report.title ==
+               "Installed steel beams in the north wing and completed the safety walkthrough"
+
+      assert report.summary == description
+      assert report.date == Date.utc_today()
+    end
+
+    test "extract_report_attrs/1 derives title, summary, and date" do
+      description =
+        "Completed the concrete pour for section B. Site cleanup finished before handover."
+
+      assert %{title: title, summary: ^description, date: date} =
+               Reports.extract_report_attrs(description)
+
+      assert title == "Completed the concrete pour for section B"
+      assert date == Date.utc_today()
+    end
+
     test "list_daily_reports/0 returns all reports" do
       assert {:ok, %DailyReport{} = report} = Reports.create_daily_report(@valid_attrs)
 
