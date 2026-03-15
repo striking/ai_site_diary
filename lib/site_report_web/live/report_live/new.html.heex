@@ -12,7 +12,7 @@
         <p class="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-500">Site reports</p>
         <h1 class="text-3xl font-semibold tracking-tight text-zinc-950">New daily report</h1>
         <p class="text-sm text-zinc-600">
-          Capture the highlights, summary, and date for today's site activity.
+          Describe what happened on site today and Site Report AI will create the report details for you.
         </p>
       </div>
     </div>
@@ -25,9 +25,13 @@
         phx-submit="save"
         class="space-y-6"
       >
-        <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:summary]} type="textarea" label="Summary" rows="6" />
-        <.input field={@form[:date]} type="date" label="Date" />
+        <.input
+          field={@form[:description]}
+          type="textarea"
+          label="What happened on site today?"
+          rows="8"
+          placeholder="Installed steel beams in the north wing, completed the safety walkthrough, and noted two follow-up items for tomorrow."
+        />
 
         <div class="flex items-center justify-end gap-3 border-t border-zinc-100 pt-4">
           <.link
@@ -40,7 +44,7 @@
             type="submit"
             class="inline-flex items-center rounded-full bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800"
           >
-            Save report
+            Create report
           </button>
         </div>
       </.form>

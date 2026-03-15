@@ -6,7 +6,7 @@ defmodule SiteReportWeb.ReportLive.New do
 
   @impl true
   def mount(_params, _session, socket) do
-    changeset = DailyReport.changeset(%DailyReport{}, %{})
+    changeset = DailyReport.description_changeset(%DailyReport{}, %{})
 
     {:ok,
      socket
@@ -17,7 +17,7 @@ defmodule SiteReportWeb.ReportLive.New do
   def handle_event("validate", %{"report" => report_params}, socket) do
     changeset =
       %DailyReport{}
-      |> DailyReport.changeset(report_params)
+      |> DailyReport.description_changeset(report_params)
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :form, to_form(changeset, as: :report))}
