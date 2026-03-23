@@ -40,6 +40,12 @@ defmodule SiteReport.Reports do
     }
   end
 
+  def update_daily_report(%DailyReport{} = daily_report, attrs) do
+    daily_report
+    |> DailyReport.changeset(attrs)
+    |> Repo.update()
+  end
+
   def delete_daily_report(%DailyReport{} = daily_report) do
     Repo.delete(daily_report)
   end

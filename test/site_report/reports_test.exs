@@ -55,6 +55,21 @@ defmodule SiteReport.ReportsTest do
       assert Reports.get_daily_report!(report.id).id == report.id
     end
 
+    test "update_daily_report/2 updates the report" do
+      assert {:ok, %DailyReport{} = report} = Reports.create_daily_report(@valid_attrs)
+
+      assert {:ok, %DailyReport{} = updated_report} =
+               Reports.update_daily_report(report, %{
+                 title: "Updated title",
+                 summary: "Updated summary",
+                 date: ~D[2026-03-14]
+               })
+
+      assert updated_report.title == "Updated title"
+      assert updated_report.summary == "Updated summary"
+      assert updated_report.date == ~D[2026-03-14]
+    end
+
     test "delete_daily_report/1 deletes the report" do
       assert {:ok, %DailyReport{} = report} = Reports.create_daily_report(@valid_attrs)
 

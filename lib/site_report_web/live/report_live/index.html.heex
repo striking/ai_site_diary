@@ -48,6 +48,13 @@
                 <h2 class="text-lg font-semibold text-zinc-900">{report.title}</h2>
                 <p class="mt-1 text-sm text-zinc-500">{report.date}</p>
               </div>
+
+              <.link
+                navigate={~p"/reports/#{report.id}/edit"}
+                class="inline-flex items-center rounded-full border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-900"
+              >
+                Edit
+              </.link>
             </div>
             <p class="mt-4 text-sm leading-6 text-zinc-700">{report.summary}</p>
           </article>
